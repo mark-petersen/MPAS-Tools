@@ -4,11 +4,11 @@
 # Last updated 4/20/2018
 
 # user defined commands and paths:
-MATLAB='matlab -nodesktop -nodisplay -nosplash  -r'
+MATLAB='matlab -nodesktop -nodisplay -nosplash -r '
 MPASTOOLS='path/to/repo/MPAS-Tools'
 JIGSAW='path/to/repo/jigsaw-geo-matlab'
 
-# for Mark:
+# Mark's paths on grizzly, LANL IC
 MPASTOOLS='/usr/projects/climate/mpeterse/repos/MPAS-Tools/jigsaw_to_MPAS'
 JIGSAW='/usr/projects/climate/mpeterse/repos/jigsaw-geo-matlab/master'
 MATLAB='octave --silent --eval '
