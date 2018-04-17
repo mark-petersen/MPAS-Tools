@@ -36,7 +36,7 @@ echo
 echo 'Step 1. Build mesh using JIGSAW ...'
 echo $MATLAB "driver_jigsaw_to_mpas('$MESHNAME')"
 echo
-$MATLAB "driver_jigsaw_to_mpas('$MESHNAME')"
+$MATLAB "driver_jigsaw_to_mpas('$MESHNAME','$JIGSAW')"
 echo 'done'
 echo
 echo 'Step 2. Convert triangles from jigsaw format to netcdf...'

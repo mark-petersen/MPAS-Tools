@@ -1,3 +1,7 @@
-function cellWidthGlobal = QU240(lon,lat)
+function [cellWidthGlobal,lon,lat] = QU240
 
-    cellWidthGlobal = 240*ones([length(lat) length(lon)]);
+   ddeg = 10;
+   lat = [ -90:ddeg: 90]';
+   lon = [-180:ddeg:180]';
+
+   cellWidthGlobal = 240*ones([length(lat) length(lon)]);
