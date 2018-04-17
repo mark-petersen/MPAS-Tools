@@ -12,9 +12,6 @@ addpath('define_mesh')
 addpath('mesh_definition_tools/latitude_1D_grids')
 addpath('mesh_definition_tools/spherical_tools')
 
-
-
-
 %------------------------------------ setup files for JIGSAW
     dirName = ['generated_meshes/' meshName '/'];
 		system(['mkdir -p ' dirName]);
@@ -30,8 +27,7 @@ addpath('mesh_definition_tools/spherical_tools')
     lat = [ -90:ddeg: 90]';
     lon = [-180:ddeg:180]';
 
-		% Soon: Change to call any grid.
-    cellWidthGlobal = EC60to30(lon,lat);
+    cellWidthGlobal = feval(meshName,lon,lat);
     
     if (makePlots)
         figure('color','w');

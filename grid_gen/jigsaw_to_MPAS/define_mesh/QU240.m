@@ -1,3 +1,3 @@
-function gridCellSizeGlobal = QU240(lon,lat)
+function cellWidthGlobal = QU240(lon,lat)
 
-    gridCellSizeGlobal = 240*ones([length(lon) length(lat)]);
+    cellWidthGlobal = 240*ones([length(lat) length(lon)]);

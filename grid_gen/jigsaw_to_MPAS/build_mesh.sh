@@ -56,15 +56,18 @@ echo 'done'
 echo
 echo 'Step 4. (Optional) Create vtk file for visualization'
 echo "paraview_vtk_field_extractor.py ${MESHNAME}_base_mesh.nc ${MESHNAME}_vtk"
-$VTKEXTRACTOR --ignore_time -d maxEdges=0 -v allOnCells -f  ${MESHNAME}_base_mesh.nc -o ${MESHNAME}_vtk
-echo 'Injecting bathymetry ...'
-echo "inject_bathymetry.py ${MESHNAME}_culled.nc"
-$JIGSAW2NETCDF/inject_bathymetry.py ${MESHNAME}_culled.nc
+$VTKEXTRACTOR --ignore_time -d maxEdges=0 -v allOnCells -f  ${MESHNAME}_base_mesh.nc -o ${MESHNAME}_base_mesh_vtk
 echo 'done'
+echo
 echo 'Step 5. (Optional) Cull land cells using topo.msh.  This is a quick cull, not the method for a production mesh.'
 echo "MpasCellCuller.x ${MESHNAME}_base_mesh.nc ${MESHNAME}_culled.nc"
 $CELLCULLER ${MESHNAME}_base_mesh.nc ${MESHNAME}_culled.nc
 echo 'Injecting bathymetry ...'
 echo "inject_bathymetry.py ${MESHNAME}_culled.nc"
 $JIGSAW2NETCDF/inject_bathymetry.py ${MESHNAME}_culled.nc
+echo 'done'
+echo
+echo 'Step 6. (Optional) Create vtk file for visualization'
+echo "paraview_vtk_field_extractor.py ${MESHNAME}_base_mesh.nc ${MESHNAME}_vtk"
+$VTKEXTRACTOR --ignore_time -d maxEdges=0 -v allOnCells -f  ${MESHNAME}_culled.nc -o ${MESHNAME}_culled_vtk
 echo 'done'
