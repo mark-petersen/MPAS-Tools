@@ -1,11 +1,10 @@
-function EC_CellWidth = EC_CellWidthVsLat(latitude, varargin)
+function cellWidthOut = EC_CellWidthVsLat(latitude, varargin)
 % EC_CellWidthVsLat - Create Eddy Closure spacing as a function of latitude.
 % This is intended as part of the workflow to make an MPAS global mesh.
 %
-% Syntax: EC_CellWidth = EC_CellWidthVsLat(latitude, cellWidthEq, cellWidthMidLat, cellWidthPole,
+% Syntax: cellWidthOut = EC_CellWidthVsLat(latitude, cellWidthEq, cellWidthMidLat, cellWidthPole,
 %                                          latPosEq, latPosPole, latTransition, 
 %                                          latWidthEq, latWidthPole)
-%
 % Inputs:
 %    latitude - vector of length n, with entries between -90 and 90, degrees
 %
@@ -23,17 +22,15 @@ function EC_CellWidth = EC_CellWidthVsLat(latitude, varargin)
 %    latWidthPole = 9.0; % width of transition region
 %    
 % Outputs:
-%    EC_CellWidth - vector of length n, entrie are cell width as a function of latitude
+%    cellWidthOut - vector of length n, entrie are cell width as a function of latitude
 %
 % Example: 
 %    EC60to30 = EC_CellWidthVsLat(latitude)
 %    EC120to60 = EC_CellWidthVsLat(latitude,60,120,70)
-%
-% See also: RRS_CellWidth
 
 % Author: Mark Petersen
 % Los Alamos National Laboratory
-% March 2018; Last revision: 3/27/2018
+% March 2018; Last revision: 4/20/2018
 
 % Default values for Cell width, km
 cellWidthEq = 30.0; % Eq is equatorial latitude
@@ -64,12 +61,12 @@ densityEq = (minCellWidth/cellWidthEq)^4;
 densityMidLat = (minCellWidth/cellWidthMidLat)^4;
 densityPole = (minCellWidth/cellWidthPole)^4;
 densityEC = zeros(size(latitude));
-EC_CellWidth = zeros(size(latitude));
+cellWidthOut = zeros(size(latitude));
 for j=1:length(latitude)
   if abs(latitude(j))<latTransition
     densityEC(j) = ((densityEq-densityMidLat) * (1.0 + tanh( (latPosEq - abs(latitude(j)))/ latWidthEq)) / 2.0) + densityMidLat;
   else
     densityEC(j) = ((densityMidLat-densityPole) * (1.0 + tanh( (latPosPole - abs(latitude(j)))/ latWidthPole)) / 2.0) + densityPole;
   end
-  EC_CellWidth(j) = minCellWidth/densityEC(j)^0.25;
+  cellWidthOut(j) = minCellWidth/densityEC(j)^0.25;
 end

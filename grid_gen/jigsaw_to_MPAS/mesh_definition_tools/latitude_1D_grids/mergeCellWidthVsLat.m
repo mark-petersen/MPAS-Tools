@@ -14,16 +14,11 @@ function cellWidthOut = mergeCellWidthVsLat(latitude, cellWidthInSouth, cellWidt
 %    latWidthTransition = 0; % width of latitude transition, degrees
 %
 % Outputs:
-%    RRS_CellWidth - vector of length n, entrie are cell width as a function of latitude
-%
-% Example: 
-%    RRS18to6 = RRS_CellWidthVsLat(latitude,18,6)
-%
-% See also: RRS_CellWidth
+%    cellWidthOut - vector of length n, entries are cell width as a function of latitude
 
 % Author: Mark Petersen
 % Los Alamos National Laboratory
-% March 2018; Last revision: 3/27/2018
+% March 2018; Last revision: 4/20/2018
 
 % Assign defaults
 latTransition = 0; % latitude to change from cellWidthInSouth to cellWidthInNorth, degrees

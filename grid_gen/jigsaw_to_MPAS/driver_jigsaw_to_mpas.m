@@ -25,11 +25,7 @@ function driver_jigsaw_to_mpas(meshName,pathToJigsaw)
    opts.hfun_file = [dirName meshName '-HFUN.msh']; % HFUN file
            
    %------------------------------------ compute HFUN over GEOM
-   ddeg = 10;
-   lat = [ -90:ddeg: 90]';
-   lon = [-180:ddeg:180]';
- 
-   cellWidthGlobal = feval(meshName);
+   [cellWidthGlobal,lon,lat] = feval(meshName);
    
    if (makePlots)
        figure('color','w');
