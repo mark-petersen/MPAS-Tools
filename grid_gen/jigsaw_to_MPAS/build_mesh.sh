@@ -9,19 +9,19 @@ MPASTOOLS='path/to/repo/MPAS-Tools'
 JIGSAW='path/to/repo/jigsaw-geo-matlab'
 
 # for Mark:
-MATLAB='octave --silent --eval '
-MPASTOOLS='/usr/projects/climate/mpeterse/repos/MPAS-Tools/master'
+MPASTOOLS='/usr/projects/climate/mpeterse/repos/MPAS-Tools/jigsaw_to_MPAS'
 JIGSAW='/usr/projects/climate/mpeterse/repos/jigsaw-geo-matlab/master'
+MATLAB='octave --silent --eval '
 
 # fill in longer paths, based on paths above:
-JIGSAW2NETCDF=$MPASTOOLS/grid_gen/triangle_jigsaw_to_netcdf/
+JIGSAW2NETCDF=$MPASTOOLS/grid_gen/${MESHNAME}_triangle_jigsaw_to_netcdf/
 MESHCONVERTER=$MPASTOOLS/grid_gen/mesh_conversion_tools/MpasMeshConverter.x
 CELLCULLER=$MPASTOOLS/grid_gen/mesh_conversion_tools/MpasCellCuller.x
 
 # First argument to this shell script is the name of the mesh
 MESHNAME=$1
 if [ -f define_mesh/${MESHNAME}.m ]; then
-   echo 'Starting workflow to build mesh from ${MESHNAME}.m'
+   echo "Starting workflow to build mesh from ${MESHNAME}.m"
 else
    echo "File define_mesh/${MESHNAME}.m does not exist."
 	 echo "call using:"
@@ -36,30 +36,28 @@ CMD='try, run('"'$NAME.m'"'), catch, exit(1), end, exit(0);' # delete later
 echo $MATLAB "driver_jigsaw_to_mpas('$MESHNAME')"
 $MATLAB "driver_jigsaw_to_mpas('$MESHNAME')"
 echo 'done'
-exit
 
-echo 'Convert to netcdf file (grid.nc) ...'
-python $JIGSAW2NETCDF/triangle_jigsaw_to_netcdf.py -m ${NAME}-MESH.msh -s
+cd generated_meshes/$MESHNAME
+echo 'triangle_jigsaw_to_netcdf.py -s -m ${MESHNAME}-MESH.msh -o ${MESHNAME}_triangles.nc'
+$JIGSAW2NETCDF/triangle_jigsaw_to_netcdf.py -s -m ${MESHNAME}-MESH.msh -o ${MESHNAME}_triangles.nc
 echo 'done'
 
-echo 'Convert to MPAS mesh (mesh.nc) ...'
-$MESHCONVERTER grid.nc
-echo 'done'
-
-echo 'Removing grid.nc and renaming mesh.nc to '$NAME'.nc ...'
-rm grid.nc
-mv mesh.nc $NAME.nc
+echo "MpasMeshConverter.x ${MESHNAME}_triangles.nc ${MESHNAME}_all_cells.nc"
+$MESHCONVERTER ${MESHNAME}_triangles.nc ${MESHNAME}_all_cells.nc
 echo 'done'
 
 echo 'Injecting bathymetry ...'
-$JIGSAW2NETCDF/inject_bathymetry.py $NAME.nc
+ln -isf $JIGSAW/jigsaw/geo/topo.msh .
+echo "inject_bathymetry.py ${MESHNAME}_all_cells.nc"
+$JIGSAW2NETCDF/inject_bathymetry.py ${MESHNAME}_all_cells.nc
 echo 'done'
 
 echo 'Culling cells...'
-$CELLCULLER $NAME.nc
-mv culled_mesh.nc $NAME.nc
+echo "MpasCellCuller.x ${MESHNAME}_all_cells.nc ${MESHNAME}_culled.nc"
+$CELLCULLER ${MESHNAME}_all_cells.nc ${MESHNAME}_culled.nc
 echo 'done'
 
 echo 'Injecting bathymetry ...'
-$JIGSAW2NETCDF/inject_bathymetry.py $NAME.nc
+echo "inject_bathymetry.py ${MESHNAME}_culled.nc"
+$JIGSAW2NETCDF/inject_bathymetry.py ${MESHNAME}_culled.nc
 echo 'done'

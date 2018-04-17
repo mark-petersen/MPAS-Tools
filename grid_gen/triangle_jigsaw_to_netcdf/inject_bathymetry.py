@@ -13,7 +13,10 @@ rtod = 180.0/np.pi
 if __name__ == "__main__":
     import sys
 
-    topo = readmsh('/Users/pwolfram/Documents/GridGen/MultiscaleMeshGen/jigsaw-geo-matlab/jigsaw/geo/topo.msh')
+    # Following file needs to be provided from jigsaw repo.  For example, link to
+    # /path/to/repos/jigsaw-geo-matlab/jigsaw/geo/topo.msh
+    topo = readmsh('topo.msh')
+
     xpos = topo['COORD1']*dtor
     ypos = topo['COORD2']*dtor
     zlev = np.reshape(topo['VALUE'], (len(ypos), len(xpos)))

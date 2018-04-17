@@ -1,7 +1,9 @@
-function driver_jigsaw_to_mpas(meshname)
-
-printf("Starting withing driver_jigsaw_to_mpas")
-printf(meshname)
+function driver_jigsaw_to_mpas(meshName)
+%-----------------------------------------------------------
+%   Mark Petersen (mpetersen@lanl.gov)
+%   Phillip Wolfram (pwolfram@lanl.gov)
+%   04/01/2018
+%-----------------------------------------------------------
 
 makePlots = false;
 jigsaw_path_locations;
@@ -10,36 +12,26 @@ addpath('define_mesh')
 addpath('mesh_definition_tools/latitude_1D_grids')
 addpath('mesh_definition_tools/spherical_tools')
 
-%-----------------------------------------------------------
-%   Mark Petersen (mpetersen@lanl.gov)
-%   Phillip Wolfram (pwolfram@lanl.gov)
-%   04/01/2018
-%-----------------------------------------------------------
 
 
 
 %------------------------------------ setup files for JIGSAW
-    name = mfilename('fullpath');
+    dirName = ['generated_meshes/' meshName '/'];
+		system(['mkdir -p ' dirName]);
 
-    opts.geom_file = ...                % GEOM file
-        [name, '.msh'];
-
-    opts.jcfg_file = ...                % JCFG file
-        [name, '.jig'];
-
-    opts.mesh_file = ...                % MESH file
-        [name, '-MESH.msh'];
-
-    opts.hfun_file = ...                % HFUN file
-        [name, '-HFUN.msh'];
-
+    opts.geom_file = [dirName meshName '.msh'];      % GEOM file
+    opts.jcfg_file = [dirName meshName '.jig'];      % JCFG file
+    opts.mesh_file = [dirName meshName '-MESH.msh']; % MESH file
+    opts.hfun_file = [dirName meshName '-HFUN.msh']; % HFUN file
+        
 %------------------------------------ compute HFUN over GEOM
 
-    lat = [-90:10:90]';
-    lon = [-180:10:180]';
+		ddeg = 10;
+    lat = [ -90:ddeg: 90]';
+    lon = [-180:ddeg:180]';
 
 		% Soon: Change to call any grid.
-    cellWidthGlobal = EC60to30(lon,lat)
+    cellWidthGlobal = EC60to30(lon,lat);
     
     if (makePlots)
         figure('color','w');
