@@ -1,11 +1,14 @@
-function driver_jigsaw_to_mpas
+function driver_jigsaw_to_mpas(meshname)
+
+printf("Starting withing driver_jigsaw_to_mpas")
+printf(meshname)
 
 makePlots = false;
 jigsaw_path_locations;
 
 addpath('define_mesh')
-addpath('define_mesh/latitude_1D_grids')
-addpath('define_mesh/spherical_tools')
+addpath('mesh_definition_tools/latitude_1D_grids')
+addpath('mesh_definition_tools/spherical_tools')
 
 %-----------------------------------------------------------
 %   Mark Petersen (mpetersen@lanl.gov)
@@ -32,15 +35,15 @@ addpath('define_mesh/spherical_tools')
 
 %------------------------------------ compute HFUN over GEOM
 
-    lat = [-90:10:90]'; alat=lat*pi/180;
-    lon = [-180:10:180]';alon=lon*pi/180;
+    lat = [-90:10:90]';
+    lon = [-180:10:180]';
 
 		% Soon: Change to call any grid.
-    gridCellSizeGlobal = EC60to30(lon,lat)
+    cellWidthGlobal = EC60to30(lon,lat)
     
     if (makePlots)
         figure('color','w');
-        surf(lon,lat,gridCellSizeGlobal) ;
+        surf(lon,lat,cellWidthGlobal) ;
         view(2); axis image; hold on ;
         shading interp;
         title('JIGSAW HFUN data') ;
@@ -48,13 +51,13 @@ addpath('define_mesh/spherical_tools')
 
 %------------------------------------ save HFUN data to file
 
-    %gridCellSizeGlobal = ...
-    %    gridCellSizeGlobal * 2./sqrt(3.);        %%!! it seems that we need this?
+    %cellWidthGlobal = ...
+    %    cellWidthGlobal * 2./sqrt(3.);        %%!! it seems that we need this?
 
     hmat.mshID = 'ELLIPSOID-GRID';
-    hmat.point.coord{1} = alon ;
-    hmat.point.coord{2} = alat ;
-    hmat.value = gridCellSizeGlobal ;
+    hmat.point.coord{1} = lon*pi/180 ;
+    hmat.point.coord{2} = lat*pi/180 ;
+    hmat.value = cellWidthGlobal ;
 
     savemsh(opts.hfun_file,hmat) ;
 
