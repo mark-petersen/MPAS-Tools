@@ -49,3 +49,4 @@ for i=1:length(lon)
     end
   end
 end
+cellWidthOut = cellWidthOut';

@@ -1,4 +1,4 @@
-function [cellWidthGlobal,lon,lat] = Arctic60to9_Atl45deg
+function [cellWidthGlobal,lon,lat] = Arctic60to9_Atl10deg
 % Create cell width for this mesh on a regular latitude-longitude grid.
 % Outputs:
 %    cellWidthGlobal - m x n array, entries are desired cell width in km
@@ -12,7 +12,7 @@ function [cellWidthGlobal,lon,lat] = Arctic60to9_Atl45deg
    EC60to30 = EC_CellWidthVsLat(lat);
    QU1 = ones(size(lat));
    
-   AtlNH = mergeCellWidthVsLat(lat, 30*QU1, 9*QU1, 45, 10);
+   AtlNH = mergeCellWidthVsLat(lat, 30*QU1, 9*QU1, 10, 10);
    AtlGrid = mergeCellWidthVsLat(lat, EC60to30, AtlNH, 0, 1);
 
    PacNH = mergeCellWidthVsLat(lat, 30*QU1, 9*QU1, 45, 10);
